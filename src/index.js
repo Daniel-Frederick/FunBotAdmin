@@ -60,9 +60,6 @@ client.on('messageCreate', (msg) => {
                 console.error('Error: ', error)
             })
     }
-
-
-
 })
 
 //My discord bot TOKEN
