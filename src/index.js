@@ -47,7 +47,7 @@ client.on('messageCreate', (msg) => {
     // Makes sure that the bot does not repeat itself
     if(msg.author.bot) {return;} 
 
-    // Picks a random Song from a Spotify playlist
+    // Picks a random Song from a Spotify playlist 
     if(msg.content === '!randomsong'){
             getRandomSongFromPlaylist('3pcrMrmeoCxNVdBFKVXJQB')
             .then((song) => {
