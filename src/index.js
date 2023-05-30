@@ -23,8 +23,9 @@ client.on('ready', (c) => {
 
 // Spotify Web API client
 const spotifyApi = new SpotifyWebApi({
-    clientId: "51e4cbfadf2f4a0ba7ffcdbfdb947259",
-    clientSecret: "bbe8a3a4c055400aa6bc6da8661f8581",
+    // Both obtained in the spotify developers website and creating a new app
+    clientId: process.env.SPOTIFY_CLIENT_ID, // Spotify client ID 
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,  // Spotify client secret
 });
 
 // Spotify access token
@@ -33,7 +34,7 @@ async function setSpotifyAccessToken() {
     spotifyApi.setAccessToken(data.body['access_token']);
 }
 
-// Randomly select a song from teh spotify playlist
+// Randomly select a song from the spotify playlist
 async function getRandomSongFromPlaylist(playlistId) {
     const data = await spotifyApi.getPlaylistTracks(playlistId, { limit: 100 });
     const tracks = data.body.items;
@@ -43,13 +44,13 @@ async function getRandomSongFromPlaylist(playlistId) {
     return randomTrack;
 }
 
-client.on('messageCreate', (msg) => {
+client.on('messageCreate', (msg) => { // msg = access to a message
     // Makes sure that the bot does not repeat itself
     if(msg.author.bot) {return;} 
 
     // Picks a random Song from a Spotify playlist
-    if(msg.content === '!randomsong'){
-            getRandomSongFromPlaylist('3pcrMrmeoCxNVdBFKVXJQB')
+    if(msg.content === '/randomsong'){
+            getRandomSongFromPlaylist(process.env.SPOTIFY_PLAYLIST_ID)
             .then((song) => {
                 const songName = song.name;
                 const artists = song.artists.map((artist) => artist.name).join(', ');
