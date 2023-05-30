@@ -3,7 +3,7 @@ require('dotenv').config(); //This lets the docuent access the .env class
 const {Client, IntentsBitField} = require('discord.js');
 const SpotifyWebApi = require('spotify-web-api-node');
 
-//All the things the bot has access to
+// All the things the bot has access to
 const client = new Client({
     intents: [
         IntentsBitField.Flags.Guilds,
@@ -13,27 +13,27 @@ const client = new Client({
     ],
 })
 
-//Tell you when the bot is online
+// Tell you when the bot is online
 client.on('ready', (c) => {
     console.log(`${c.user.tag} is online.`);
 
-    // set the spotify access token
+    // Set the spotify access token
     setSpotifyAccessToken();
 })
 
-//Spotify Web API client
+// Spotify Web API client
 const spotifyApi = new SpotifyWebApi({
     clientId: "51e4cbfadf2f4a0ba7ffcdbfdb947259",
     clientSecret: "bbe8a3a4c055400aa6bc6da8661f8581",
 });
 
-//spotify access token
+// Spotify access token
 async function setSpotifyAccessToken() {
     const data = await spotifyApi.clientCredentialsGrant();
     spotifyApi.setAccessToken(data.body['access_token']);
 }
 
-// randomly select a song from teh spotify playlist
+// Randomly select a song from teh spotify playlist
 async function getRandomSongFromPlaylist(playlistId) {
     const data = await spotifyApi.getPlaylistTracks(playlistId, { limit: 100 });
     const tracks = data.body.items;
@@ -44,14 +44,10 @@ async function getRandomSongFromPlaylist(playlistId) {
 }
 
 client.on('messageCreate', (msg) => {
-    if(msg.author.bot) {
-        return;
-    }
+    // Makes sure that the bot does not repeat itself
+    if(msg.author.bot) {return;} 
 
-    if(msg.content === 'Hola'){
-        msg.reply('Hey boi!');
-    }
-
+    // Picks a random Song from a Spotify playlist
     if(msg.content === '!randomsong'){
             getRandomSongFromPlaylist('3pcrMrmeoCxNVdBFKVXJQB')
             .then((song) => {
